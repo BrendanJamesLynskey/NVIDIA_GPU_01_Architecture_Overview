@@ -861,7 +861,7 @@
     <h3>Naming intuition</h3>
     <ul>
         <li><strong>Architecture names</strong> are mathematicians and physicists: Pascal, Volta, Turing, Ampere, Ada Lovelace, Hopper, Blackwell, Rubin, Feynman.</li>
-        <li><strong>Die codenames</strong> follow a letter pattern: G + arch initial + 10x for the big die (GP100, GV100, GA100, GH100), 10x for consumer reticles (GA102, AD102).</li>
+        <li><strong>Die codenames</strong> follow a letter pattern: G + arch initial + <strong>100</strong> for the flagship datacenter die (GP100, GV100, GA100, GH100, GB100), and G + arch initial + <strong>10x</strong> with x &isin; {2, 3, 4, 6, 7} for the smaller consumer reticles (GA102, GA104, AD102, AD103). Turing is the odd one out &mdash; its dies use a <strong>TU</strong> prefix (TU102, TU104) rather than GT.</li>
         <li><strong>SKU names</strong> diverge: datacenter cards use letters (P100, V100, A100, H100, B200), consumer cards use the GeForce RTX numbering (RTX 30/40/50 series).</li>
     </ul>
 
@@ -1152,7 +1152,7 @@
             <ul>
                 <li>Two reticle-limited dies on TSMC 4NP, each ~104B transistors, total ~208B per package.</li>
                 <li>Linked by <strong>NV-HBI</strong> (NVIDIA High Bandwidth Interface) at 10 TB/s &mdash; transparent to software; the OS sees one GPU.</li>
-                <li><strong>5th-gen tensor cores</strong> with <strong>MX-FP4</strong> (microscaling FP4): 2&times; the FP8 throughput, 4&times; FP16. Loss-of-quality is mitigated by per-block (32-element) shared exponents.</li>
+                <li><strong>5th-gen tensor cores</strong> with FP4 microscaling &mdash; both <strong>MX-FP4</strong> (open OCP standard: 32-element blocks, E8M0 scale) and <strong>NVFP4</strong> (NVIDIA's tighter variant: 16-element blocks with an E4M3 scale plus a per-tensor FP32 scale). 2&times; the FP8 throughput, 4&times; FP16; NVFP4 typically wins on accuracy, MX-FP4 on tooling portability.</li>
                 <li>192 GB HBM3e (8 stacks &times; 24 GB), 8 TB/s aggregate bandwidth.</li>
                 <li>Up to 1000 W TDP on SXM6.</li>
             </ul>
@@ -1170,7 +1170,7 @@
     </div>
 
     <h3>Why FP4 is the headline</h3>
-    <p>FP4 has 16 representable values. Naively that destroys model quality. Microscaling (MX) saves it: every block of 32 FP4 values shares an 8-bit exponent, so the dynamic range is per-block rather than per-tensor. Empirically MX-FP4 inference on Blackwell is within ~0.5 percentage points of FP8 on most benchmarks while running 2&times; faster. <strong>The serving cost of frontier LLMs roughly halves overnight when the kernels and quantisers catch up.</strong></p>
+    <p>FP4 has 16 representable values. Naively that destroys model quality. Microscaling saves it by giving each small block of FP4 values its own scale, so the dynamic range is per-block rather than per-tensor. Blackwell's Tensor Cores accelerate <strong>two flavours</strong>: <strong>MX-FP4</strong> &mdash; the open OCP standard, with 32-element blocks and an E8M0 (8-bit, exponent-only) per-block scale &mdash; and <strong>NVFP4</strong>, NVIDIA's variant, with tighter 16-element blocks and an E4M3 (FP8) per-block scale on top of a per-tensor FP32 scale. NVFP4 is typically the more accurate of the two and is what TensorRT-LLM and the Transformer Engine default to; MX-FP4 wins where you need a vendor-neutral, OCP-compliant pipeline. Empirically FP4 inference on Blackwell lands within ~0.5 percentage points of FP8 on most benchmarks while running 2&times; faster. <strong>The serving cost of frontier LLMs roughly halves overnight when the kernels and quantisers catch up.</strong></p>
 
     <div class="callout">
         <div class="callout-label">NVL72 in one sentence</div>
@@ -1316,7 +1316,7 @@
                 tcGen: '5th-gen (MX-FP4)',
                 nvlink: 'NVLink 5 (1.8 TB/s)',
                 fp16: 'ok', bf16: 'ok', fp8: 'ok', fp4: 'ok',
-                summary: 'Blackwell breaks the reticle limit by bonding two dies into one logical GPU. MX-FP4 microscaling halves inference cost again versus FP8. NVL72 puts 72 B200 in one cache-coherent NVLink domain (130 TB/s aggregate, 13.8 TB HBM) — the rack is the new GPU.'
+                summary: 'Blackwell breaks the reticle limit by bonding two dies into one logical GPU. FP4 microscaling (MX-FP4 and NVFP4) halves inference cost again versus FP8. NVL72 puts 72 B200 in one cache-coherent NVLink domain (130 TB/s aggregate, 13.8 TB HBM) — the rack is the new GPU.'
             }
         };
 
@@ -1388,7 +1388,7 @@
 
     <div class="callout">
         <div class="callout-label">The two software-visible cliffs</div>
-        <p>Most generation-to-generation improvements are gradual: a bit more bandwidth, a bit more L2, a bit faster NVLink. <strong>Two transitions are not gradual.</strong> The <strong>FP8 cliff at Hopper</strong> (2022) doubled effective inference throughput and made the Transformer Engine a real thing. The <strong>FP4 cliff at Blackwell</strong> (2024) doubled it again with MX microscaling. If you're choosing a card, ask: do my workloads need FP8? do they need FP4? Each "yes" maps cleanly to one architectural threshold.</p>
+        <p>Most generation-to-generation improvements are gradual: a bit more bandwidth, a bit more L2, a bit faster NVLink. <strong>Two transitions are not gradual.</strong> The <strong>FP8 cliff at Hopper</strong> (2022) doubled effective inference throughput and made the Transformer Engine a real thing. The <strong>FP4 cliff at Blackwell</strong> (2024) doubled it again with FP4 microscaling (MX-FP4 and NVFP4). If you're choosing a card, ask: do my workloads need FP8? do they need FP4? Each "yes" maps cleanly to one architectural threshold.</p>
     </div>
 
     <div class="callout">
