@@ -9,15 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #0a0a0a;
-            --bg-card: #0d1117;
-            --bg-code: #161b22;
-            --text-primary: #e6edf3;
-            --text-secondary: #8b949e;
-            --accent: #76B900;
-            --accent-dim: #76B90044;
-            --accent-glow: #76B90033;
-            --border: #21262d;
+            --bg-primary: #1b1b1a;
+            --bg-card: #212120;
+            --bg-code: #292928;
+            --text-primary: #edede7;
+            --text-secondary: #9b9b95;
+            --accent: #b8b315;
+            --accent-dim: #b8b31544;
+            --accent-glow: #b8b31533;
+            --border: #363633;
             --font-display: 'Space Grotesk', sans-serif;
             --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
             --font-body: 'Inter', sans-serif;
@@ -228,7 +228,7 @@
             font-family: var(--font-mono);
             font-size: 0.75rem;
             color: var(--accent);
-            background: rgba(118, 185, 0, 0.08);
+            background: rgba(184,179,21,0.08);
             padding: 0.4rem 1rem;
             border-bottom: 1px solid var(--border);
         }
@@ -243,18 +243,18 @@
             font-family: var(--font-mono);
             font-size: 0.85rem;
             line-height: 1.6;
-            color: #c9d1d9;
+            color: #d5d5cf;
         }
 
         /* Syntax highlighting (manual) */
-        .kw { color: #ff7b72; }
-        .fn { color: #d2a8ff; }
-        .str { color: #a5d6ff; }
-        .cm { color: #8b949e; font-style: italic; }
-        .num { color: #79c0ff; }
-        .type { color: #ffa657; }
-        .dir { color: #ff7b72; }
-        .mac { color: #ffa657; }
+        .kw { color: #e57d63; }
+        .fn { color: #d1c2e1; }
+        .str { color: #c9dbe2; }
+        .cm { color: #9b9b95; font-style: italic; }
+        .num { color: #afcbd8; }
+        .type { color: #e0b172; }
+        .dir { color: #e57d63; }
+        .mac { color: #e0b172; }
 
         /* ── Tables ── */
         .table-wrap {
@@ -292,7 +292,7 @@
         }
 
         tr:nth-child(even) td {
-            background: rgba(13, 17, 23, 0.5);
+            background: rgba(33,33,32,0.5);
         }
 
         /* ── Diagrams ── */
@@ -324,7 +324,7 @@
         .diagram-box.accent {
             border-color: var(--accent);
             color: var(--accent);
-            background: rgba(118, 185, 0, 0.08);
+            background: rgba(184,179,21,0.08);
         }
 
         .diagram-box.dim {
@@ -400,7 +400,7 @@
         .hierarchy-item.accent {
             border-color: var(--accent);
             color: var(--accent);
-            background: rgba(118, 185, 0, 0.08);
+            background: rgba(184,179,21,0.08);
         }
 
         /* Grid diagram */
@@ -673,7 +673,7 @@
             cursor: pointer;
             transition: background 0.15s ease;
         }
-        .btn:hover { background: rgba(118, 185, 0, 0.2); }
+        .btn:hover { background: rgba(184,179,21,0.2); }
         .btn:disabled { opacity: 0.4; cursor: not-allowed; }
         .btn.secondary {
             background: var(--bg-code);
@@ -750,8 +750,8 @@
             margin-left: 0.3rem;
         }
         .badge.ok    { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
-        .badge.warn  { border-color: #ffa657; color: #ffa657; background: rgba(255,166,87,0.08); }
-        .badge.bad   { border-color: #ff7b72; color: #ff7b72; background: rgba(255,123,114,0.08); }
+        .badge.warn  { border-color: #e0b172; color: #e0b172; background: rgba(224,177,114,0.08); }
+        .badge.bad   { border-color: #e57d63; color: #e57d63; background: rgba(229,125,99,0.08); }
 
     </style>
 </head>
@@ -879,16 +879,16 @@
     <div class="canvas-wrap">
         <svg viewBox="0 0 760 320" width="760" height="320" xmlns="http://www.w3.org/2000/svg">
             <style>
-                .axis{ stroke: #21262d; }
-                .grid{ stroke: #161b22; stroke-dasharray: 2,3; }
-                .b1 { fill: rgba(165,214,255,0.35); stroke: #a5d6ff; }
-                .b2 { fill: rgba(118,185,0,0.4);   stroke: #76B900; }
-                .b3 { fill: rgba(210,168,255,0.35); stroke: #d2a8ff; }
-                .b4 { fill: rgba(255,166,87,0.35); stroke: #ffa657; }
-                .lbl{ fill: #8b949e; font-family: 'JetBrains Mono', monospace; font-size: 11px; }
-                .val{ fill: #e6edf3; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; }
-                .h  { fill: #e6edf3; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; }
-                .nt { fill: #8b949e; font-family: 'JetBrains Mono', monospace; font-size: 10px; }
+                .axis{ stroke: #363633; }
+                .grid{ stroke: #292928; stroke-dasharray: 2,3; }
+                .b1 { fill: rgba(201,219,226,0.35); stroke: #c9dbe2; }
+                .b2 { fill: rgba(184,179,21,0.4);   stroke: #b8b315; }
+                .b3 { fill: rgba(209,194,225,0.35); stroke: #d1c2e1; }
+                .b4 { fill: rgba(224,177,114,0.35); stroke: #e0b172; }
+                .lbl{ fill: #9b9b95; font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+                .val{ fill: #edede7; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; }
+                .h  { fill: #edede7; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px; }
+                .nt { fill: #9b9b95; font-family: 'JetBrains Mono', monospace; font-size: 10px; }
             </style>
             <text x="10" y="18" class="h">Transistor count of top die per family (billions)</text>
             <line x1="170" y1="30" x2="170" y2="290" class="axis"/>
