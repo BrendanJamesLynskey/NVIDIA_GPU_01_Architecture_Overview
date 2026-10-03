@@ -819,9 +819,9 @@
                 <tr><th>Model era</th><th>Year</th><th>Enabling GPU</th><th>What the silicon unlocked</th></tr>
             </thead>
             <tbody>
-                <tr><td>BERT, ResNet-50 at scale</td><td>2018&ndash;19</td><td>V100 (Volta)</td><td>First-gen tensor cores: FP16 mixed-precision training became standard.</td></tr>
+                <tr><td>BERT-era models, ResNet-50 at scale</td><td>2018&ndash;19</td><td>V100 (Volta; Google's own BERT ran on TPUs)</td><td>First-gen tensor cores: FP16 mixed-precision training became standard.</td></tr>
                 <tr><td>GPT-2 / T5 / early multimodal</td><td>2019&ndash;20</td><td>V100, then A100</td><td>32 GB HBM2 on V100; A100's 40/80 GB and 2:4 sparsity opened the 10B-parameter regime.</td></tr>
-                <tr><td>GPT-3 (175B), PaLM, OPT</td><td>2020&ndash;22</td><td>A100 (Ampere)</td><td>BF16 + TF32 + 3rd-gen tensor cores + NVLink 3 made dense 100B+ training routine.</td></tr>
+                <tr><td>OPT-175B, BLOOM, LLaMA-1</td><td>2020&ndash;22</td><td>A100 (Ampere)</td><td>BF16 + TF32 + 3rd-gen tensor cores + NVLink 3 made dense 100B+ training routine.</td></tr>
                 <tr><td>GPT-4-class, Llama-2 70B</td><td>2023&ndash;24</td><td>H100 (Hopper)</td><td>FP8 (Transformer Engine) doubled effective throughput; TMA cut prefill latency.</td></tr>
                 <tr><td>Frontier 2025 (GPT-4o, Claude 3.7, Llama-3.1 405B)</td><td>2024&ndash;25</td><td>H100, H200, early B200</td><td>HBM3e at 4.8 TB/s on H200 turned long-context decode from bandwidth-starved to compute-bound.</td></tr>
                 <tr><td>Frontier 2026 (next-gen MoE, very-long-context agents)</td><td>2025&ndash;26</td><td>B200, GB200 NVL72</td><td>FP4 doubles inference again; NVL72 makes a 72-GPU domain look like one machine for KV-heavy MoE.</td></tr>
@@ -867,7 +867,7 @@
 
     <div class="callout">
         <div class="callout-label">Why Turing matters in the lineage</div>
-        <p>Turing is often skipped in AI write-ups because GV100 had tensor cores first and GA100 had the first really useful ones. But Turing's TU104-based <strong>T4</strong> was the inference workhorse of 2019&ndash;2022 &mdash; the first card cloud providers deployed at scale specifically for serving. INT8 / INT4 tensor cores and a 75 W TDP made it the default inference SKU long before anyone had heard of vLLM.</p>
+        <p>Turing is often skipped in AI write-ups because GV100 had tensor cores first and GA100 had the first really useful ones. But Turing's TU104-based <strong>T4</strong> was the inference workhorse of 2019&ndash;2022 &mdash; the first card cloud providers deployed at scale specifically for serving. INT8 / INT4 tensor cores and a 70 W TDP made it the default inference SKU long before anyone had heard of vLLM.</p>
     </div>
 </section>
 
@@ -1011,10 +1011,10 @@
             <h4>Pascal &mdash; P100 (2016)</h4>
             <ul>
                 <li>GP100, TSMC 16FF, 15.3B transistors, 56 SMs, 3584 CUDA cores.</li>
-                <li>First card with <strong>HBM2</strong> on package: 16 GB at ~720 GB/s. A 4&ndash;5&times; bandwidth jump over the GDDR5 of Maxwell.</li>
+                <li>First card with <strong>HBM2</strong> on package: 16 GB at ~720 GB/s. A ~2.5&times; bandwidth jump over the GDDR5 of Maxwell (Tesla M40: 288 GB/s).</li>
                 <li>First <strong>NVLink</strong> (gen 1, 160 GB/s aggregate) and the first SXM2 mezzanine module.</li>
                 <li><em>No tensor cores.</em> Mixed-precision FP16 was supported as a regular SIMD op, not a matrix-multiply-accumulate.</li>
-                <li>P100 was the GPU AlexNet's successors trained on. ResNet-152, the original Transformer paper (2017), early seq2seq translation &mdash; all P100-era work.</li>
+                <li>P100 was the GPU AlexNet's successors trained on. The original Transformer paper (2017) and early seq2seq translation are P100-era work (ResNet-152, Dec 2015, predates it).</li>
             </ul>
         </div>
         <div class="diagram-panel accent-border">
@@ -1024,7 +1024,7 @@
                 <li><strong>First tensor cores.</strong> 1st-gen, FP16 inputs into FP32 accumulator, 4&times;4&times;4 matrix per cycle per tensor core. ~125 TFLOPS FP16 vs ~15 TFLOPS FP32.</li>
                 <li><strong>NVLink 2.0:</strong> 300 GB/s aggregate; six links per GPU instead of four.</li>
                 <li>Independent thread scheduling: every CUDA thread now had its own program counter, fixing a long-standing warp-divergence pain point.</li>
-                <li>V100 trained BERT, GPT-2, and the entire 2018&ndash;2020 wave of transformer pretraining. Still in production at AWS (p3 instances), Lambda, and academic clusters &mdash; the "AK-47 of AI training".</li>
+                <li>V100 trained GPT-3 and much of the 2018&ndash;2020 wave of transformer pretraining (Google's BERT and T5 ran on TPUs). Still in production at AWS (p3 instances), Lambda, and academic clusters &mdash; the "AK-47 of AI training".</li>
             </ul>
         </div>
     </div>
@@ -1046,7 +1046,7 @@
             <tbody>
                 <tr><td>RTX 2080 Ti</td><td>TU102</td><td>11 GB GDDR6</td><td>Consumer flagship; first RT cores reach gamers.</td></tr>
                 <tr><td>RTX 2080 / 2070</td><td>TU104 / TU106</td><td>8 GB GDDR6</td><td>Mainstream gaming.</td></tr>
-                <tr><td><strong>T4</strong></td><td>TU104</td><td>16 GB GDDR6</td><td>The 75 W half-height inference card. Default cloud inference SKU 2019&ndash;2022.</td></tr>
+                <tr><td><strong>T4</strong></td><td>TU104</td><td>16 GB GDDR6</td><td>The 70 W half-height inference card. Default cloud inference SKU 2019&ndash;2022.</td></tr>
                 <tr><td>Quadro RTX 6000 / 8000</td><td>TU102</td><td>24 / 48 GB GDDR6</td><td>Workstation visualisation; some early ML use.</td></tr>
             </tbody>
         </table>
@@ -1054,7 +1054,7 @@
 
     <h3>What changed under the hood</h3>
     <ul>
-        <li><strong>2nd-generation tensor cores</strong> add <strong>INT8</strong> and <strong>INT4</strong> matrix multiply, on top of FP16. INT8 throughput is 4&times; FP16; INT4 is 8&times; FP16. This is the architectural moment "post-training quantisation" became a real production technique rather than a research curiosity.</li>
+        <li><strong>2nd-generation tensor cores</strong> add <strong>INT8</strong> and <strong>INT4</strong> matrix multiply, on top of FP16. INT8 throughput is 2&times; FP16; INT4 is 4&times; FP16 (T4: 65 / 130 / 260). This is the architectural moment "post-training quantisation" became a real production technique rather than a research curiosity.</li>
         <li><strong>1st-generation RT cores</strong>: bounding-volume-hierarchy traversal and ray-triangle intersection in fixed-function hardware. Mostly relevant for graphics, but the design language ("bolt domain-specific accelerators onto each SM") is exactly how the Transformer Engine arrives in Hopper four years later.</li>
         <li><strong>Mesh shaders, variable-rate shading</strong> &mdash; graphics features that funded the silicon. The AI side of Turing was almost a free side-effect.</li>
         <li><strong>NVENC / NVDEC</strong> got significantly stronger video encode and decode units &mdash; one reason T4 ended up everywhere in cloud video pipelines as well as inference.</li>
@@ -1062,7 +1062,7 @@
 
     <div class="callout">
         <div class="callout-label">Why T4 mattered</div>
-        <p>T4 launched at $2,000-ish, drew 75 W with no external power connector, fit in any 1U server, and could do INT8 inference at ~130 TOPS. Compared with V100 (300 W, $10k+, dedicated server) it was the first NVIDIA datacenter card you could rack densely without rebuilding your power and cooling. It ran most of the BERT-era inference traffic at the major clouds. Even today (2026) you'll find T4s in production for embedding generation and small-model serving.</p>
+        <p>T4 launched at $2,000-ish, drew 70 W with no external power connector, fit in any 1U server, and could do INT8 inference at ~130 TOPS. Compared with V100 (300 W, $10k+, dedicated server) it was the first NVIDIA datacenter card you could rack densely without rebuilding your power and cooling. It ran most of the BERT-era inference traffic at the major clouds. Even today (2026) you'll find T4s in production for embedding generation and small-model serving.</p>
     </div>
 </section>
 
@@ -1077,8 +1077,8 @@
             <ul>
                 <li>54.2B transistors, 826 mm&sup2;, <strong>108 SMs</strong>, 6912 CUDA cores, 432 tensor cores.</li>
                 <li><strong>40 MB L2</strong> cache, 6&times; A100's predecessor.</li>
-                <li>40 GB or 80 GB HBM2e: 1.5 TB/s (40 GB) or 2.0 TB/s (80 GB).</li>
-                <li><strong>3rd-gen tensor cores</strong>: TF32 (10-bit mantissa, free precision uplift over FP16), BF16 (8-bit exponent, training-friendly), and 2:4 structured sparsity (2&times; throughput on sparse matrices).</li>
+                <li>40 GB HBM2 at 1.5 TB/s or 80 GB HBM2e at 2.0 TB/s.</li>
+                <li><strong>3rd-gen tensor cores</strong>: TF32 (FP32's 8-bit exponent with FP16's 10-bit mantissa; a drop-in for FP32 matmul), BF16 (8-bit exponent, training-friendly), and 2:4 structured sparsity (2&times; throughput on sparse matrices).</li>
                 <li><strong>NVLink 3</strong>: 600 GB/s per GPU; SXM4 form factor.</li>
                 <li><strong>MIG</strong> (Multi-Instance GPU): one A100 splits into up to seven hardware-isolated slices, each with its own SMs, L2, and HBM partition.</li>
             </ul>
@@ -1095,7 +1095,7 @@
     </div>
 
     <h3>The training story</h3>
-    <p>The pretraining run for GPT-3 (175B parameters, May 2020) is the canonical Ampere workload. Subsequent pretrains &mdash; PaLM, OPT-175B, BLOOM, the LLaMA-1 family &mdash; all happened on A100 clusters with NVLink + InfiniBand fabric. The combination of 80 GB HBM, BF16 with stable accumulators, and 600 GB/s NVLink is what made dense 100B-parameter training routine. You still see A100 80 GB advertised on every cloud provider in 2026; the depreciation curve is unusually long.</p>
+    <p>GPT-3 (175B parameters, May 2020) was in fact trained on V100s, and PaLM on TPU v4. The canonical Ampere pretrains &mdash; OPT-175B, BLOOM, the LLaMA-1 family &mdash; all happened on A100 clusters with NVLink + InfiniBand fabric. The combination of 80 GB HBM, BF16 with stable accumulators, and 600 GB/s NVLink is what made dense 100B-parameter training routine. You still see A100 80 GB advertised on every cloud provider in 2026; the depreciation curve is unusually long.</p>
 
     <div class="callout">
         <div class="callout-label">Capability v. compute capability</div>
@@ -1113,8 +1113,8 @@
             <h4>Ada Lovelace &mdash; AD102 / RTX 4090, L40S</h4>
             <ul>
                 <li>76.3B transistors on AD102, 608 mm&sup2;, TSMC 4N.</li>
-                <li><strong>4th-generation RT cores</strong>: opacity micromaps, displaced micro-meshes; ~2&times; ray-triangle throughput over Ampere.</li>
-                <li><strong>4th-gen tensor cores</strong> &mdash; same FP16/BF16/INT8 lineup, plus <strong>FP8 support on L40S</strong> (datacenter Ada). Consumer 40-series tensor cores do not advertise FP8.</li>
+                <li><strong>3rd-generation RT cores</strong>: opacity micromaps, displaced micro-meshes; ~2&times; ray-triangle throughput over Ampere.</li>
+                <li><strong>4th-gen tensor cores</strong> &mdash; same FP16/BF16/INT8 lineup, plus <strong>FP8 support</strong> on every Ada part (sm_89), RTX 4090 included; datacenter Ada (L40S) is where NVIDIA markets it.</li>
                 <li><strong>Massive 96 MB L2</strong> &mdash; about 16&times; the cache of GA102. Designed for ray-tracing locality, but also a huge win for LLM decode (KV cache hits in L2 more often).</li>
                 <li>GDDR6X (4090, 4080) at ~1 TB/s; no HBM, no NVLink on 4090.</li>
                 <li>RTX 4090: $1,600 consumer card with 24 GB. L40S: 48 GB, datacenter-licensed, ECC, FP8.</li>
@@ -1130,7 +1130,7 @@
                 <li><strong>Thread-block clusters</strong>: groups of CTAs that share an SM cluster's L1 and a new <strong>Distributed Shared Memory</strong> address space &mdash; a true new tier in the memory hierarchy.</li>
                 <li><strong>DPX instructions</strong>: dynamic-programming acceleration (alignment, RL value iteration) &mdash; niche but novel.</li>
                 <li>50 MB L2, 80 GB HBM3 (H100, 3.35 TB/s) or 141 GB HBM3e (H200, 4.8 TB/s).</li>
-                <li>NVLink 4: 900 GB/s per GPU, 4th-gen NVSwitch trays for 8-GPU and 256-GPU domains.</li>
+                <li>NVLink 4: 900 GB/s per GPU, 3rd-gen NVSwitch trays for 8-GPU and 256-GPU domains.</li>
             </ul>
         </div>
     </div>
@@ -1174,7 +1174,7 @@
 
     <div class="callout">
         <div class="callout-label">NVL72 in one sentence</div>
-        <p>NVL72 turns the question "do I have enough VRAM?" into "do I have enough rack?" &mdash; 72 &times; 192 GB = 13.8 TB of HBM3e in a single coherent address space, with 130 TB/s of intra-domain bandwidth. For a 400B-parameter model with a 1M-token context window, that is the difference between possible and not.</p>
+        <p>NVL72 turns the question "do I have enough VRAM?" into "do I have enough rack?" &mdash; 72 &times; 186 GB = 13.4 TB of HBM3e in a single coherent address space, with 130 TB/s of intra-domain bandwidth. For a 400B-parameter model with a 1M-token context window, that is the difference between possible and not.</p>
     </div>
 </section>
 
@@ -1261,7 +1261,7 @@
                 tcGen: '1st-gen (FP16)',
                 nvlink: 'NVLink 2 (300 GB/s)',
                 fp16: 'ok', bf16: 'bad', fp8: 'bad', fp4: 'bad',
-                summary: 'Volta introduced the tensor core: 4×4×4 FP16 matmul-accumulate per cycle per TC, an order of magnitude speedup for transformer training. V100 trained BERT, GPT-2, and most of the 2018–2020 transformer wave. Still alive in cloud (AWS p3, Lambda).'
+                summary: 'Volta introduced the tensor core: 4×4×4 FP16 matmul-accumulate per cycle per TC, an order of magnitude speedup for transformer training. V100 trained GPT-3 and much of the 2018–2020 transformer wave (Google's BERT and T5 ran on TPUs). Still alive in cloud (AWS p3, Lambda).'
             },
             turing: {
                 year: '2018',
@@ -1272,7 +1272,7 @@
                 tcGen: '2nd-gen (FP16, INT8, INT4)',
                 nvlink: 'NVLink 2 (some SKUs only)',
                 fp16: 'ok', bf16: 'bad', fp8: 'bad', fp4: 'bad',
-                summary: 'Turing added 1st-gen RT cores and 2nd-gen tensor cores with INT8 / INT4. The T4 (TU104) became the inference workhorse of 2019–2022 — 75 W, half-height, ran most early cloud inference traffic. INT8 throughput is 4× FP16; INT4 is 8×.'
+                summary: 'Turing added 1st-gen RT cores and 2nd-gen tensor cores with INT8 / INT4. The T4 (TU104) became the inference workhorse of 2019–2022 — 70 W, half-height, ran most early cloud inference traffic. INT8 throughput is 2× FP16; INT4 is 4×.'
             },
             ampere: {
                 year: '2020',
@@ -1283,7 +1283,7 @@
                 tcGen: '3rd-gen (TF32, BF16, 2:4 sparse)',
                 nvlink: 'NVLink 3 (600 GB/s)',
                 fp16: 'ok', bf16: 'ok', fp8: 'bad', fp4: 'bad',
-                summary: 'Ampere is the LLM training workhorse. GPT-3, PaLM, OPT, BLOOM, LLaMA-1 — all trained on A100 clusters. TF32 + BF16 + 2:4 sparsity + 80 GB HBM2e + MIG made dense 100B-parameter training routine. Still ubiquitous in 2026.'
+                summary: 'Ampere is the LLM training workhorse. OPT, BLOOM, LLaMA-1 — all trained on A100 clusters (GPT-3 used V100s, PaLM TPUs). TF32 + BF16 + 2:4 sparsity + 80 GB HBM2e + MIG made dense 100B-parameter training routine. Still ubiquitous in 2026.'
             },
             ada: {
                 year: '2022',
@@ -1291,10 +1291,10 @@
                 trans: '76.3B (AD102)',
                 topSku: 'RTX 4090 24GB / L40S 48GB',
                 bw: '~1008 GB/s (4090) / ~864 GB/s (L40S)',
-                tcGen: '4th-gen (FP8 on L40S only)',
+                tcGen: '4th-gen (FP8 on all Ada)',
                 nvlink: 'none on 4090; bridge on some workstation SKUs',
-                fp16: 'ok', bf16: 'ok', fp8: 'warn', fp4: 'bad',
-                summary: 'Ada is the consumer/graphics-first cousin of Hopper, same node. 96 MB L2 cache (16× Ampere) dominates the design — great for ray tracing, surprisingly good for LLM decode KV reuse. RTX 4090 became the canonical hobbyist 13–30B card. FP8 only on the datacenter L40S.'
+                fp16: 'ok', bf16: 'ok', fp8: 'ok', fp4: 'bad',
+                summary: 'Ada is the consumer/graphics-first cousin of Hopper, same node. 96 MB L2 cache (16× Ampere) dominates the design — great for ray tracing, surprisingly good for LLM decode KV reuse. RTX 4090 became the canonical hobbyist 13–30B card. FP8 tensor cores on every Ada part, RTX 4090 included.'
             },
             hopper: {
                 year: '2022–2023',
@@ -1316,7 +1316,7 @@
                 tcGen: '5th-gen (MX-FP4)',
                 nvlink: 'NVLink 5 (1.8 TB/s)',
                 fp16: 'ok', bf16: 'ok', fp8: 'ok', fp4: 'ok',
-                summary: 'Blackwell breaks the reticle limit by bonding two dies into one logical GPU. FP4 microscaling (MX-FP4 and NVFP4) halves inference cost again versus FP8. NVL72 puts 72 B200 in one cache-coherent NVLink domain (130 TB/s aggregate, 13.8 TB HBM) — the rack is the new GPU.'
+                summary: 'Blackwell breaks the reticle limit by bonding two dies into one logical GPU. FP4 microscaling (MX-FP4 and NVFP4) halves inference cost again versus FP8. NVL72 puts 72 B200 in one cache-coherent NVLink domain (130 TB/s aggregate, 13.4 TB HBM) — the rack is the new GPU.'
             }
         };
 
@@ -1361,7 +1361,7 @@
 
     <div class="callout">
         <div class="callout-label">Reading the badges</div>
-        <p>Green = native tensor-core support. Amber = supported on a subset of SKUs (Ada's FP8 is L40S-only, for example). Red = not supported in tensor cores; software emulation is possible but defeats the point.</p>
+        <p>Green = native tensor-core support. Amber = supported on a subset of SKUs (e.g. MIG, which only the 100-class parts have). Red = not supported in tensor cores; software emulation is possible but defeats the point.</p>
     </div>
 </section>
 
@@ -1379,7 +1379,7 @@
                 <tr><td>Consumer inference, 13&ndash;30B at home</td><td><strong>RTX 4090</strong> or <strong>RTX 5090</strong> (Ada / Blackwell consumer)</td><td>96 MB L2 (Ada) and GDDR7 (Blackwell) destroy decode latency. No NVLink, but you don't need it.</td></tr>
                 <tr><td>Frontier training (100B+ dense, multi-node)</td><td><strong>H100 / H200 cluster</strong> (Hopper) on HGX + InfiniBand</td><td>FP8 + Transformer Engine + NVLink 4 (900 GB/s). The known-good frontier stack.</td></tr>
                 <tr><td>Production inference, 70B class</td><td><strong>H200 141 GB</strong> or <strong>B200 192 GB</strong></td><td>Bandwidth (4.8&ndash;8 TB/s) is what bounds tok/s; capacity holds full FP8 weights + KV.</td></tr>
-                <tr><td>Production inference, MoE 400B+</td><td><strong>GB200 NVL72</strong></td><td>13.8 TB HBM in one NVLink domain at 130 TB/s. The only sane home for trillion-parameter MoE.</td></tr>
+                <tr><td>Production inference, MoE 400B+</td><td><strong>GB200 NVL72</strong></td><td>13.4 TB HBM in one NVLink domain at 130 TB/s. The only sane home for trillion-parameter MoE.</td></tr>
                 <tr><td>Slice a big GPU into many tenants</td><td><strong>A100 / H100 + MIG</strong></td><td>Hardware-isolated partitions, separate L2 and HBM slice each. Blackwell B200 also supports MIG.</td></tr>
                 <tr><td>Cheap inference fleet (L4-class)</td><td><strong>L40S 48 GB</strong> (Ada datacenter)</td><td>FP8 on Ada, ECC, datacenter-licensed, 350 W. DP across many cards beats one big card per dollar.</td></tr>
             </tbody>
