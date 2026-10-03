@@ -1261,7 +1261,7 @@
                 tcGen: '1st-gen (FP16)',
                 nvlink: 'NVLink 2 (300 GB/s)',
                 fp16: 'ok', bf16: 'bad', fp8: 'bad', fp4: 'bad',
-                summary: 'Volta introduced the tensor core: 4×4×4 FP16 matmul-accumulate per cycle per TC, an order of magnitude speedup for transformer training. V100 trained GPT-3 and much of the 2018–2020 transformer wave (Google's BERT and T5 ran on TPUs). Still alive in cloud (AWS p3, Lambda).'
+                summary: 'Volta introduced the tensor core: 4×4×4 FP16 matmul-accumulate per cycle per TC, an order of magnitude speedup for transformer training. V100 trained GPT-3 and much of the 2018–2020 transformer wave (Google’s BERT and T5 ran on TPUs). Still alive in cloud (AWS p3, Lambda).'
             },
             turing: {
                 year: '2018',
@@ -1361,7 +1361,7 @@
 
     <div class="callout">
         <div class="callout-label">Reading the badges</div>
-        <p>Green = native tensor-core support. Amber = supported on a subset of SKUs (e.g. MIG, which only the 100-class parts have). Red = not supported in tensor cores; software emulation is possible but defeats the point.</p>
+        <p>Green = native tensor-core support. Amber = supported on a subset of SKUs. Red = not supported in tensor cores; software emulation is possible but defeats the point.</p>
     </div>
 </section>
 
